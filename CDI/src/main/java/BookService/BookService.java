@@ -3,7 +3,7 @@ package BookService;
 import IdGenerator.IdGenerator;
 import Book.Book;
 import BookStorage.BookStorage;
-import Logger.Logger;
+import Logger.LoggerInterceptors.*;
 import IdGenerator.Qualifiers.*;
 import javax.inject.Inject;
 import javax.interceptor.*;
@@ -14,9 +14,8 @@ public class BookService {
 	private IdGenerator idGenerator;
 	@Inject
 	private BookStorage bookStorage;
-	@Inject
-	private Logger logger;
-	
+
+	@Interceptors(LogInterceptor.class)
 	public void registerBook(String name, String desc) {
 		Book book = new Book();
 		book.setId(this.idGenerator.getId());
@@ -27,14 +26,4 @@ public class BookService {
 		
 		this.bookStorage.putBook(book);
 	}
-	
-	@AroundInvoke
-	private Object logging(InvocationContext ic) throws Exception{
-		logger.log(ic.getTarget().toString() + " - " + ic.getMethod().getName());
-		try {
-			return ic.proceed();
-		}
-		finally { }
-	}
-	
 }
