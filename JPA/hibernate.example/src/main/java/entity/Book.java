@@ -5,23 +5,26 @@ import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.NamedQuery;
 import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "book")
+@NamedQuery(name = "getBooksByGreaterPrice", query = "SELECT b FROM Book b WHERE b.price > ?1")
+@NamedQuery(name= "getBooksByLessPrice", query = "SELECT b FROM Book b WHERE b.price < ?1")
 public class Book {
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	@NotNull @Size(min = 30, max = 2000)
+	private int id;
+	@NotNull @Size(min = 30, max = 100)
 	private String title;
 	@NotNull @Positive
 	private int price;
 	
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 	
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	
